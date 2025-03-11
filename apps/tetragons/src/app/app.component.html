@@ -8,7 +8,9 @@
       @for(one of zones; track one.id) {
       <app-overlay [enabled]="(store.deletingZoneId$ | async) === one.id">
         <div class="zone-row">
-          <div class="label">{{ one.name }}</div>
+          <div class="label">
+            <b>{{ one.name }}</b><span>{{ zonePoints(one) }}</span>
+          </div>
           <button class="btn" (click)="service.deleteZone(one.id)">
             Delete
           </button>

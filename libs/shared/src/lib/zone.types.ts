@@ -7,6 +7,6 @@ export interface ZoneData {
   points: Vertices;
 }
 
-export type Vertices = [Vertex, Vertex, Vertex, Vertex];
+export type Vertices = [Point, Point, Point, Point];
 
-export type Vertex = [number, number];
+export type Point = [number, number];

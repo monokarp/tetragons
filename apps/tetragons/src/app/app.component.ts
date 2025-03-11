@@ -1,17 +1,20 @@
+import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
+import { Point, Vertices, Zone } from '@tetragons/shared';
+import { filter, tap, withLatestFrom } from 'rxjs';
 import { AppService } from './app.service';
 import { AppStore } from './app.store';
 import { OverlayComponent } from './overlay/overlay.component';
 import { ZoneFormComponent } from './zone-form/zone-form.component';
-import { CommonModule } from '@angular/common';
+import { drawZones } from './canvas.utils';
 
 @Component({
   imports: [CommonModule, RouterModule, OverlayComponent, ZoneFormComponent],
@@ -29,28 +32,41 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   public loadingImage = true;
 
-  constructor(public store: AppStore, public service: AppService) {}
+  constructor(public store: AppStore, public service: AppService) {
+    this.store.zones$
+      .pipe(
+        filter(Boolean),
+        withLatestFrom(this.service.loadImage()),
+        tap(() => (this.loadingImage = false)),
+        takeUntilDestroyed()
+      )
+      .subscribe(([zones, image]) => {
+        const context = this.canvas.getContext('2d');
+
+        const { width, height } = this.canvas;
+
+        if (context) {
+          context.reset();
+
+          context.imageSmoothingEnabled = false;
+
+          context.drawImage(image, 0, 0, width, height);
+
+          drawZones(context, { width, height }, zones);
+        }
+      });
+  }
 
   public ngOnInit(): void {
     this.service.loadData();
   }
 
   public async ngAfterViewInit() {
-    const context = this.canvas.getContext('2d');
+    this.canvas.width = this.canvas.clientWidth;
+    this.canvas.height = this.canvas.clientHeight;
+  }
 
-    if (context) {
-      this.canvas.width = this.canvas.clientWidth;
-      this.canvas.height = this.canvas.clientHeight;
-
-      context.drawImage(
-        await this.service.loadImage(),
-        0,
-        0,
-        this.canvas.width,
-        this.canvas.height
-      );
-
-      this.loadingImage = false;
-    }
+  public zonePoints(data: Zone): string {
+    return `[${data.points.map(([x, y]) => `(${x}, ${y})`).join(', ')}]`;
   }
 }
