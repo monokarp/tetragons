@@ -6,5 +6,6 @@ import { BehaviorSubject } from 'rxjs';
 export class AppStore {
   public readonly zones$ = new BehaviorSubject<Zone[] | null>(null);
 
-  public readonly isLoading$ = new BehaviorSubject(false);
+  public readonly isCreating$ = new BehaviorSubject(false);
+  public readonly deletingZoneId$ = new BehaviorSubject<string | null>(null);
 }

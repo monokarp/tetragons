@@ -1,0 +1,10 @@
+<div class="wrapper">
+  @if (enabled) {
+  <div class="overlay" [class.animate]="showAnimation">
+    <span></span><span></span><span></span>
+  </div>
+  }
+  <div [class.mute]="enabled">
+    <ng-content></ng-content>
+  </div>
+</div>

@@ -1,1 +1,28 @@
-<p>empty</p>
+<div class="container">
+  <div class="zones">
+    @if(store.zones$ | async; as zones){
+    <app-overlay [enabled]="(store.isCreating$ | async)!">
+      <app-zone-form></app-zone-form>
+    </app-overlay>
+    <div class="zone-list">
+      @for(one of zones; track one.id) {
+      <app-overlay [enabled]="(store.deletingZoneId$ | async) === one.id">
+        <div class="zone-row">
+          <div class="label">{{ one.name }}</div>
+          <button class="btn" (click)="service.deleteZone(one.id)">
+            Delete
+          </button>
+        </div>
+      </app-overlay>
+      } @empty {
+      <div>No zones to display</div>
+      }
+    </div>
+    } @else {
+    <div>Loading data...</div>
+    }
+  </div>
+  <app-overlay [enabled]="loadingImage">
+    <canvas #canvas class="zone-canvas"></canvas>
+  </app-overlay>
+</div>

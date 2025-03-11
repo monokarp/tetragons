@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { ZoneData } from '@tetragons/shared';
 import { AppStore } from './app.store';
 import { ZoneRepository } from './zone.repo';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class AppService {
   constructor(private store: AppStore, private repo: ZoneRepository) {}
 
   public async loadData(): Promise<void> {
-    this.store.zones$.next(await this.withOverlay(() => this.repo.all()));
+    this.store.zones$.next(await this.repo.all());
   }
 
   public async createZone(data: ZoneData): Promise<void> {
@@ -18,9 +19,11 @@ export class AppService {
       throw new Error('Create zone called with an empty store');
     }
 
-    this.store.zones$.next(
-      zones.concat(await this.withOverlay(() => this.repo.create(data)))
-    );
+    this.store.isCreating$.next(true);
+
+    this.store.zones$.next(zones.concat(await this.repo.create(data)));
+
+    this.store.isCreating$.next(false);
   }
 
   public async deleteZone(id: string): Promise<void> {
@@ -30,18 +33,41 @@ export class AppService {
       throw new Error('Delete zone called with an empty store');
     }
 
-    await this.withOverlay(() => this.repo.delete(id));
+    this.store.deletingZoneId$.next(id);
+
+    await this.repo.delete(id);
+
+    this.store.deletingZoneId$.next(null);
 
     this.store.zones$.next(zones.filter((one) => one.id !== id));
   }
 
-  private async withOverlay<T>(action: () => Promise<T>): Promise<T> {
-    this.store.isLoading$.next(true);
+  public async loadImage(): Promise<HTMLImageElement> {
+    const img = new Image();
 
-    const result = await action();
+    img.src = 'https://picsum.photos/1920/1080';
 
-    this.store.isLoading$.next(false);
+    return new Promise((res, rej) => {
+      const onload = () => {
+        finalize();
+        res(img);
+      };
 
-    return result;
+      const onerror = () => {
+        finalize();
+        rej(new Error('Failed to load image'));
+      };
+
+      img.addEventListener('load', onload, { once: true });
+
+      img.addEventListener('error', onerror, {
+        once: true,
+      });
+
+      function finalize() {
+        img.removeEventListener('load', onload);
+        img.removeEventListener('error', onerror);
+      }
+    });
   }
 }
