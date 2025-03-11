@@ -1,4 +1,10 @@
-import { Point, Vertices, Zone } from '@tetragons/shared';
+import {
+  centroidOf,
+  maxShapeLengths,
+  Point,
+  sortByPolarAngle,
+  Zone,
+} from '@tetragons/shared';
 
 // I'm making these up, in your real world scenario coordinate ranges and scaling are probably known in advance
 export const expectedRangeX = 20;
@@ -57,7 +63,9 @@ function drawZone(
 ) {
   context.beginPath();
 
-  zone.points.forEach((point, idx) => drawPoint(context, offsets, point, idx));
+  sortByPolarAngle(zone.points).forEach((point, idx) =>
+    drawPoint(context, offsets, point, idx)
+  );
 
   context.closePath();
 
@@ -96,7 +104,7 @@ function drawShapeLabel(
   offsets: OffsetCalculator,
   zone: Zone
 ) {
-  const [labelX, labelY] = approximateCenter(zone.points);
+  const [labelX, labelY] = centroidOf(zone.points);
   const [width, height] = maxShapeLengths(zone.points);
 
   const labelFontSizePx = Math.round(Math.max(width, height) * 5);
@@ -108,27 +116,4 @@ function drawShapeLabel(
     offsets.X(labelX) - width * 7,
     offsets.Y(labelY) + height / 2
   );
-}
-
-function approximateCenter(points: Vertices): Point {
-  const xSum = points.reduce((sum, [x]) => sum + x, 0);
-  const ySum = points.reduce((sum, [, y]) => sum + y, 0);
-
-  const count = points.length;
-
-  return [xSum / count, ySum / count];
-}
-
-function maxShapeLengths(points: Vertices): [number, number] {
-  const xCoords = [];
-  const yCoords = [];
-
-  for (const [x, y] of points) {
-    xCoords.push(x);
-    yCoords.push(y);
-  }
-
-  const length = (range: number[]) => Math.max(...range) - Math.min(...range);
-
-  return [length(xCoords), length(yCoords)];
 }
