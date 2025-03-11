@@ -1,0 +1,26 @@
+.errors {
+    div {
+        color: red;
+    }
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+}
+
+.point-group {
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+
+    padding: 0.5rem;
+
+    input {
+        width: 4rem;
+    }
+}

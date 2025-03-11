@@ -1,8 +1,8 @@
 import { Point, Vertices, Zone } from '@tetragons/shared';
 
 // I'm making these up, in your real world scenario coordinate ranges and scaling are probably known in advance
-const expectedRangeX = 20;
-const expectedRangeY = 12;
+export const expectedRangeX = 20;
+export const expectedRangeY = 12;
 const scalePadding = 0.8;
 
 interface CanvasSize {

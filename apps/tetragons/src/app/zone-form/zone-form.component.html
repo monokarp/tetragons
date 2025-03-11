@@ -1,1 +1,69 @@
-<p>zone-form works!</p>
+<form class="form-container" [formGroup]="zoneForm" (submit)="onSubmit()">
+  <label for="name">Zone name:</label>
+  <input id="name" type="text" formControlName="name" />
+  @if(zoneForm.controls.name.touched){
+  <div class="errors">
+    @if(zoneForm.controls.name.hasError('required')) {
+    <div>Zone name is required</div>
+    } @if(zoneForm.controls.name.hasError('pattern')) {
+    <div>Can only contain latin letters, numbers and whitespace</div>
+    } @if(zoneForm.controls.name.hasError('maxlength')) {
+    <div>Maximum length is 10</div>
+    }
+  </div>
+  }
+
+  <div class="point-group" formGroupName="pointA">
+    <div>Point A</div>
+
+    <input id="pointA.x" type="number" formControlName="x" />
+    <input id="pointA.y" type="number" formControlName="y" />
+  </div>
+  <div class="errors">
+    @for(error of getPointErrors(zoneForm.controls.pointA); track error) {
+    <div>{{ error }}</div>
+    }
+  </div>
+
+  <div class="point-group" formGroupName="pointB">
+    <div>Point B</div>
+
+    <input id="pointB.x" type="number" formControlName="x" />
+    <input id="pointB.y" type="number" formControlName="y" />
+  </div>
+  <div class="errors">
+    @for(error of getPointErrors(zoneForm.controls.pointB); track error) {
+    <div>{{ error }}</div>
+    }
+  </div>
+
+  <div class="point-group" formGroupName="pointC">
+    <div>Point C</div>
+
+    <input id="pointC.x" type="number" formControlName="x" />
+    <input id="pointC.y" type="number" formControlName="y" />
+  </div>
+  <div class="errors">
+    @for(error of getPointErrors(zoneForm.controls.pointC); track error) {
+    <div>{{ error }}</div>
+    }
+  </div>
+
+  <div class="point-group" formGroupName="pointD">
+    <div>Point D</div>
+
+    <input id="pointD.x" type="number" formControlName="x" />
+    <input id="pointD.y" type="number" formControlName="y" />
+  </div>
+  <div class="errors">
+    @for(error of getPointErrors(zoneForm.controls.pointD); track error) {
+    <div>{{ error }}</div>
+    }
+  </div>
+  <div class="errors">
+    @if(zoneForm.touched && zoneForm.hasError('uniquePoints')){
+    <div>All points must be unique</div>
+    }
+  </div>
+  <button type="submit">Submit</button>
+</form>

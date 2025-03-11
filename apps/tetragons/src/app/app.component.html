@@ -2,7 +2,7 @@
   <div class="zones">
     @if(store.zones$ | async; as zones){
     <app-overlay [enabled]="(store.isCreating$ | async)!">
-      <app-zone-form></app-zone-form>
+      <app-zone-form (createZone)="service.createZone($event)"></app-zone-form>
     </app-overlay>
     <div class="zone-list">
       @for(one of zones; track one.id) {

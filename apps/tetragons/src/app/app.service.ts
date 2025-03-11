@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ZoneData } from '@tetragons/shared';
 import { AppStore } from './app.store';
 import { ZoneRepository } from './zone.repo';
-import { Subject } from 'rxjs';
 
 @Injectable()
 export class AppService {
