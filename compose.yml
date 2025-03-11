@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: ./
+      dockerfile: apps/server/Dockerfile
+    ports:
+      - '3000:3000'
+    volumes:
+      - server-data:/app/data
+    healthcheck:
+      test: ['CMD', 'curl', '-f', '${API_URL}/zone']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    environment:
+      - API_URL=${API_URL}
+
+  web:
+    build:
+      context: ./
+      dockerfile: apps/tetragons/Dockerfile
+      args:
+        - API_URL=${API_URL}
+    ports:
+      - '4200:4200'
+    depends_on:
+      server:
+        condition: service_healthy
+    environment:
+      - API_URL=${API_URL}
+
+volumes:
+  server-data:
