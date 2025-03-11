@@ -1,0 +1,11 @@
+
+.btn-rect {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 0.125rem;
+
+    &:hover {
+        cursor: pointer;
+        background-color: lightgrey;
+    }
+}

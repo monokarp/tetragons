@@ -1,3 +1,5 @@
+@use '../common.scss';
+
 $ratio-x: 16;
 $ratio-y: 9;
 $canvas-size-fraction: 4rem;
@@ -20,6 +22,10 @@ $canvas-size-fraction: 4rem;
     }
 }
 
+.zone-list {
+    margin-top: 1rem;
+}
+
 .zone-row {
     display: flex;
     flex-direction: row;
@@ -37,17 +43,6 @@ $canvas-size-fraction: 4rem;
         span {
             font-size: smaller;
             margin-left: 0.3rem;
-        }
-    }
-
-    .btn {
-        background-color: white;
-        border: 1px solid black;
-        border-radius: 0.125rem;
-
-        &:hover {
-            cursor: pointer;
-            background-color: lightgrey;
         }
     }
 }
