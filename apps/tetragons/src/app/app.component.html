@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" [appTestId]="TestIds.Host">
   <div class="zones">
     @if(store.zones$ | async; as zones){
     <app-overlay [enabled]="(store.isCreating$ | async)!">
@@ -7,11 +7,11 @@
     <div class="zone-list">
       @for(one of zones; track one.id) {
       <app-overlay [enabled]="(store.deletingZoneId$ | async) === one.id">
-        <div class="zone-row">
+        <div class="zone-row" [appTestId]="TestIds.Row.Host">
           <div class="label">
             <b>{{ one.name }}</b><span>{{ zonePoints(one) }}</span>
           </div>
-          <button class="btn-rect" (click)="service.deleteZone(one.id)">
+          <button class="btn-rect" (click)="service.deleteZone(one.id)" [appTestId]="TestIds.Row.Delete">
             Delete
           </button>
         </div>
@@ -25,6 +25,6 @@
     }
   </div>
   <app-overlay [enabled]="loadingImage">
-    <canvas #canvas class="zone-canvas"></canvas>
+    <canvas #canvas class="zone-canvas" [appTestId]="TestIds.Canvas"></canvas>
   </app-overlay>
 </div>

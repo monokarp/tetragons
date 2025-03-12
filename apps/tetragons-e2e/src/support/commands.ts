@@ -1,37 +1,30 @@
 /// <reference types="cypress" />
-
-// ***********************************************
-// This example commands.ts shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
+import { testIdAttrName } from '@tetragons/shared';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Chainable<Subject> {
-      login(email: string, password: string): void;
+      byTestId<E extends Node = HTMLElement>(
+        id: string,
+        options?: CyOptions
+      ): CyChainable<E>;
     }
   }
 }
 
-// -- This is a parent command --
-Cypress.Commands.add('login', (email, password) => {
-  console.log('Custom command example: Login', email, password);
-});
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+export type CyOptions = Partial<
+  Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow
+>;
+export type CyChainable<E extends Node = HTMLElement> = Cypress.Chainable<
+  JQuery<E>
+>;
+
+Cypress.Commands.add(
+  'byTestId',
+  <E extends Node = HTMLElement>(
+    id: string,
+    options?: CyOptions
+  ): CyChainable<E> => cy.get(`[${testIdAttrName}="${id}"]`, options)
+);

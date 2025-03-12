@@ -8,16 +8,23 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
-import { Point, Vertices, Zone } from '@tetragons/shared';
+import { AppTestIds, Zone } from '@tetragons/shared';
 import { filter, tap, withLatestFrom } from 'rxjs';
 import { AppService } from './app.service';
 import { AppStore } from './app.store';
-import { OverlayComponent } from './overlay/overlay.component';
-import { ZoneFormComponent } from './zone-form/zone-form.component';
 import { drawZones } from './canvas.utils';
+import { OverlayComponent } from './overlay/overlay.component';
+import { TestIdDirective } from './test-id.directive';
+import { ZoneFormComponent } from './zone-form/zone-form.component';
 
 @Component({
-  imports: [CommonModule, RouterModule, OverlayComponent, ZoneFormComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    OverlayComponent,
+    ZoneFormComponent,
+    TestIdDirective,
+  ],
   providers: [AppService, AppStore],
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -29,6 +36,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   public get canvas(): HTMLCanvasElement {
     return this.canvasChild.nativeElement as HTMLCanvasElement;
   }
+
+  public readonly TestIds = AppTestIds.ZonePage;
 
   public loadingImage = true;
 

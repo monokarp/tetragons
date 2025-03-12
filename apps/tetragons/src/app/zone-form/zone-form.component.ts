@@ -9,8 +9,9 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { ZoneData } from '@tetragons/shared';
+import { AppTestIds, ZoneData } from '@tetragons/shared';
 import { expectedRangeX, expectedRangeY } from '../canvas.utils';
+import { TestIdDirective } from '../test-id.directive';
 
 const defaultPointValue = { x: 0, y: 0 };
 const defaultFormValue = {
@@ -23,12 +24,14 @@ const defaultFormValue = {
 
 @Component({
   selector: 'app-zone-form',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TestIdDirective],
   templateUrl: './zone-form.component.html',
   styleUrl: './zone-form.component.scss',
 })
 export class ZoneFormComponent {
   public readonly createZone = output<ZoneData>();
+
+  public readonly TestIds = AppTestIds.ZonePage.Form;
 
   public readonly zoneForm = new FormGroup(
     {

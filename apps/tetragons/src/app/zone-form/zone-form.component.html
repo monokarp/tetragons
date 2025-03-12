@@ -1,69 +1,118 @@
-<form class="form-container" [formGroup]="zoneForm" (submit)="onSubmit()">
-  <label for="name">Zone name:</label>
-  <input id="name" type="text" formControlName="name" />
-  @if(zoneForm.controls.name.touched){
-  <div class="errors">
-    @if(zoneForm.controls.name.hasError('required')) {
-    <div>Zone name is required</div>
-    } @if(zoneForm.controls.name.hasError('pattern')) {
-    <div>Can only contain latin letters, numbers and whitespace</div>
-    } @if(zoneForm.controls.name.hasError('maxlength')) {
-    <div>Maximum length is 10</div>
+<div [appTestId]="TestIds.Host">
+  <form class="form-container" [formGroup]="zoneForm" (submit)="onSubmit()">
+    <label for="name">Zone name:</label>
+    <input
+      id="name"
+      type="text"
+      formControlName="name"
+      [appTestId]="TestIds.Name"
+    />
+    @if(zoneForm.controls.name.touched){
+    <div class="errors">
+      @if(zoneForm.controls.name.hasError('required')) {
+      <div [appTestId]="TestIds.Errors">Zone name is required</div>
+      } @if(zoneForm.controls.name.hasError('pattern')) {
+      <div [appTestId]="TestIds.Errors">Can only contain latin letters, numbers and whitespace</div>
+      } @if(zoneForm.controls.name.hasError('maxlength')) {
+      <div [appTestId]="TestIds.Errors">Maximum length is 10</div>
+      }
+    </div>
     }
-  </div>
-  }
 
-  <div class="point-group" formGroupName="pointA">
-    <div>Point A</div>
+    <div class="point-group" formGroupName="pointA">
+      <div>Point A</div>
 
-    <input id="pointA.x" type="number" formControlName="x" />
-    <input id="pointA.y" type="number" formControlName="y" />
-  </div>
-  <div class="errors">
-    @for(error of getPointErrors(zoneForm.controls.pointA); track error) {
-    <div>{{ error }}</div>
-    }
-  </div>
+      <input
+        [appTestId]="TestIds.Coordinate"
+        id="pointA.x"
+        type="number"
+        formControlName="x"
+      />
+      <input
+        [appTestId]="TestIds.Coordinate"
+        id="pointA.y"
+        type="number"
+        formControlName="y"
+      />
+    </div>
+    <div class="errors">
+      @for(error of getPointErrors(zoneForm.controls.pointA); track error) {
+      <div [appTestId]="TestIds.Errors">{{ error }}</div>
+      }
+    </div>
 
-  <div class="point-group" formGroupName="pointB">
-    <div>Point B</div>
+    <div class="point-group" formGroupName="pointB">
+      <div>Point B</div>
 
-    <input id="pointB.x" type="number" formControlName="x" />
-    <input id="pointB.y" type="number" formControlName="y" />
-  </div>
-  <div class="errors">
-    @for(error of getPointErrors(zoneForm.controls.pointB); track error) {
-    <div>{{ error }}</div>
-    }
-  </div>
+      <input
+        [appTestId]="TestIds.Coordinate"
+        id="pointB.x"
+        type="number"
+        formControlName="x"
+      />
+      <input
+        [appTestId]="TestIds.Coordinate"
+        id="pointB.y"
+        type="number"
+        formControlName="y"
+      />
+    </div>
+    <div class="errors">
+      @for(error of getPointErrors(zoneForm.controls.pointB); track error) {
+      <div [appTestId]="TestIds.Errors">{{ error }}</div>
+      }
+    </div>
 
-  <div class="point-group" formGroupName="pointC">
-    <div>Point C</div>
+    <div class="point-group" formGroupName="pointC">
+      <div>Point C</div>
 
-    <input id="pointC.x" type="number" formControlName="x" />
-    <input id="pointC.y" type="number" formControlName="y" />
-  </div>
-  <div class="errors">
-    @for(error of getPointErrors(zoneForm.controls.pointC); track error) {
-    <div>{{ error }}</div>
-    }
-  </div>
+      <input
+        [appTestId]="TestIds.Coordinate"
+        id="pointC.x"
+        type="number"
+        formControlName="x"
+      />
+      <input
+        [appTestId]="TestIds.Coordinate"
+        id="pointC.y"
+        type="number"
+        formControlName="y"
+      />
+    </div>
+    <div class="errors">
+      @for(error of getPointErrors(zoneForm.controls.pointC); track error) {
+      <div [appTestId]="TestIds.Errors">{{ error }}</div>
+      }
+    </div>
 
-  <div class="point-group" formGroupName="pointD">
-    <div>Point D</div>
+    <div class="point-group" formGroupName="pointD">
+      <div>Point D</div>
 
-    <input id="pointD.x" type="number" formControlName="x" />
-    <input id="pointD.y" type="number" formControlName="y" />
-  </div>
-  <div class="errors">
-    @for(error of getPointErrors(zoneForm.controls.pointD); track error) {
-    <div>{{ error }}</div>
-    }
-  </div>
-  <div class="errors">
-    @if(zoneForm.touched && zoneForm.hasError('uniquePoints')){
-    <div>All points must be unique</div>
-    }
-  </div>
-  <button class="btn-rect" type="submit">Create new zone</button>
-</form>
+      <input
+        [appTestId]="TestIds.Coordinate"
+        id="pointD.x"
+        type="number"
+        formControlName="x"
+      />
+      <input
+        [appTestId]="TestIds.Coordinate"
+        id="pointD.y"
+        type="number"
+        formControlName="y"
+      />
+    </div>
+    <div class="errors">
+      @for(error of getPointErrors(zoneForm.controls.pointD); track error) {
+      <div [appTestId]="TestIds.Errors">{{ error }}</div>
+      }
+    </div>
+    <div class="errors">
+      @if(zoneForm.touched && zoneForm.hasError('uniquePoints')){
+      <div [appTestId]="TestIds.Errors">All points must be unique</div>
+      }
+    </div>
+    <button class="btn-rect" type="submit" [appTestId]="TestIds.Submit">
+      Create new zone
+    </button>
+  </form>
+</div>
